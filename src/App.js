@@ -5,13 +5,13 @@ import { Octokit } from "@octokit/core";
 //const { Octokit } = require("@octokit/rest");
 
 const octokit = new Octokit({
-  auth: "757d06a58049e0c3602a1d512b5a1763772da940",
+  auth: "07c6a0dcf660e605a7462d695eec15a094afd8e2",
   baseUrl: 'https://api.github.com',
 })
 //const octokit = new Octokit({ auth: `757d06a58049e0c3602a1d512b5a1763772da940` });
 //const git_url = 'https://api.github.com/'
 
-//const queryString = 'q=' + encodeURIComponent('GitHub Octocat in:readme user:defunkt');
+//const queryString = 'q:' + encodeURIComponent('python');
 
 //const response = await octokit.request("GET https://api.github.com/search/code", {
   //q: 'q'
@@ -22,23 +22,19 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      repos: null
+      repos: {}
     }
   }
 
   async componentDidMount() {
-    //let url = `${git_url}search/code/?${queryString}`;
     let error = '';
-    let repos = null;
+    let repos;
 
     
     try {
-      let response = await octokit.request("GET /search/code", {
-        q: 'python'
+      let response = await octokit.request("GET /search/repositories", {
+        q: 'Github language: python'
       });
-      //let response = await octokit.request("GET /search/code", {
-        //q: 'GitHub Octocat in:readme user:defunkt'
-      //});
       if(response.ok) {
         // server acknowledged request: no data received yet
         repos = await response.json(); // wait for your data to arrive
@@ -47,14 +43,14 @@ class App extends React.Component {
         error = `ERROR: ${response.status} ${response.statusText}`;
       }
     } catch (err) {
-      // server not contacted
-      error = `EXCEPTION: ${err.message}`;
+    // server not contacted
+    error = `EXCEPTION: ${err.message}`
     }
     
     this.setState({
       repos: repos,
     })
-    console.log(this.state.repos);
+    console.log(repos);
   }
 
   render(){
