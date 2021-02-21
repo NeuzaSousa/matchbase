@@ -7,7 +7,7 @@ const git_url = 'https://api.github.com/'
 
 //const queryString = 'q=' + encodeURIComponent('GitHub Octocat in:readme user:defunkt');
 
-//const response = await octokit.request("GET /search/code", {
+//const response = await octokit.request("GET https://api.github.com/search/code", {
   //q: 'q'
 //});
 
@@ -21,15 +21,15 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    let url = `${git_url}?q={'python'}`;
-    //let weather = null;
+    //let url = `${git_url}search/code/?${queryString}`;
     let error = '';
-    //let today = new Date();
     let repos = null;
 
     
     try {
-      let response = await fetch(url);
+      let response = await octokit.request("GET https://api.github.com/search/code", {
+        q: 'q'
+      });
       //let response = await octokit.request("GET /search/code", {
         //q: 'GitHub Octocat in:readme user:defunkt'
       //});
