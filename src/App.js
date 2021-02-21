@@ -2,8 +2,14 @@ import './App.css';
 import React from 'react';
 import { Octokit } from "@octokit/core";
 
-const octokit = new Octokit({ auth: `757d06a58049e0c3602a1d512b5a1763772da940` });
-const git_url = 'https://api.github.com/'
+//const { Octokit } = require("@octokit/rest");
+
+const octokit = new Octokit({
+  auth: "757d06a58049e0c3602a1d512b5a1763772da940",
+  baseUrl: 'https://api.github.com',
+})
+//const octokit = new Octokit({ auth: `757d06a58049e0c3602a1d512b5a1763772da940` });
+//const git_url = 'https://api.github.com/'
 
 //const queryString = 'q=' + encodeURIComponent('GitHub Octocat in:readme user:defunkt');
 
@@ -27,8 +33,8 @@ class App extends React.Component {
 
     
     try {
-      let response = await octokit.request("GET https://api.github.com/search/code", {
-        q: 'q'
+      let response = await octokit.request("GET /search/code", {
+        q: 'python'
       });
       //let response = await octokit.request("GET /search/code", {
         //q: 'GitHub Octocat in:readme user:defunkt'
