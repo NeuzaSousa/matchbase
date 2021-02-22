@@ -12,14 +12,6 @@ const octokit = new Octokit({
   auth: token,
   baseUrl: 'https://api.github.com',
 })
-//const octokit = new Octokit({ auth: `757d06a58049e0c3602a1d512b5a1763772da940` });
-//const git_url = 'https://api.github.com/'
-
-//const queryString = 'q:' + encodeURIComponent('python');
-
-//const response = await octokit.request("GET https://api.github.com/search/code", {
-  //q: 'q'
-//});
 
 let full_name = [];
 
@@ -30,7 +22,8 @@ class App extends React.Component {
     this.state = {
       names: null,
       language: "",
-      repos: null
+      repos: null,
+      organizedRepos: {names: []}
     }
   }
 
@@ -68,21 +61,14 @@ class App extends React.Component {
   getNames() {
     for(let repo of this.state.repos){
         full_name.push(repo.full_name);
-      //console.log(repo["full_name"]);
-      //r.push(repos["fullname"]);
-      //console.log(repo)
-      //console.log(repo[r])
-      //console.log(full_name);
-    }
-    //console.log(this.state.location);
-    //console.log(full_name);
-    //console.log(this.state.repos);
-    //console.log(this.state.name1);
 
     this.setState({
       names: full_name,
+      organizedRepos: {names : this.state.names}
     })
-    console.log(this.state.names);
+    //console.log(this.state.names);
+    //console.log(this.state.organizedRepos);
+    }
   }
 
   handleChange (event) {
