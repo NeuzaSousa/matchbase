@@ -25,7 +25,7 @@ class App extends React.Component {
     let repos = null;
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
-        q: `stars:>=1000 created:>2021-02-07`
+        q: `stars:>=1000 created:>2021-02-15`
       });
 
       if({data:root}.data["items"]) {
@@ -40,6 +40,8 @@ class App extends React.Component {
     this.setState({
       repos: repos,
     })
+    //console.log(day);
+    //console.log(today)
   }
 
   async getResults() {
@@ -47,7 +49,7 @@ class App extends React.Component {
     let repos = null;
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
-        q: `stars:>=100 created:>2021-02-07 language:${this.state.language}`
+        q: `stars:>=100 created:>2021-02-15 language:${this.state.language}`
       });
 
       if({data:root}.data["items"]) {
