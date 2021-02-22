@@ -31,9 +31,6 @@ class App extends React.Component {
       if({data:root}.data["items"]) {
         // server acknowledged request: no data received yet
         repos = await {data:root}.data["items"]; // wait for your data to arrive
-      } else {
-        // server contacted; error occured
-        error = `ERROR: ${{data:root}.status} ${{data:root}.statusText}`;
       }
     } catch (err) {
     // server not contacted
