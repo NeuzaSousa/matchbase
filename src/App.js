@@ -30,11 +30,11 @@ class App extends React.Component {
   
 
   async getResults() {
-    //console.log(language)
+    //console.log(this.state.language)
     let error = '';
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
-        q: `stars:>=10 created:>2021-02-07 language:${this.state.location}`
+        q: `stars:>=10 created:>2021-02-07 language:${this.state.language}`
       });
 
       if({data:root}.data["items"]) {
@@ -56,6 +56,9 @@ class App extends React.Component {
       name3: repos[2]["full_name"],
     })
     this.getNames();
+    //console.log(repos);
+    //console.log(this.state.repos)
+    console.log(this.state.names);
   }
 
   getNames() {
@@ -64,7 +67,7 @@ class App extends React.Component {
 
     this.setState({
       names: full_name,
-      organizedRepos: {names : this.state.names}
+      organizedRepos: {names: this.state.names}
     })
     //console.log(this.state.names);
     //console.log(this.state.organizedRepos);
@@ -77,19 +80,20 @@ class App extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({language: this.state.language})
+    this.setState({language: ''})
     this.getResults();
+    //console.log(this.state.language)
     
     
     
   }
 
   render(){
-    let namesJsx = this.state.names.map(name => (
-      <li>
-        {name}
-      </li>
-    ));
+    //let namesJsx = this.state.names.map(name => (
+      //<li>
+        //{name}
+      //</li>
+    //));
 
     return(
     <div className="App">
@@ -110,7 +114,9 @@ class App extends React.Component {
       <h3>{this.state.name1}</h3>
       <h3>{this.state.name2}</h3>
       <h3>{this.state.name3}</h3>
-      <ul>{namesJsx}</ul>
+      (this.state.names
+      ? <ul>{namesJsx}</ul>
+      : <p>Hello</p>)
     </div>
     )
   }
