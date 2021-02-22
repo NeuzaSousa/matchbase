@@ -21,28 +21,29 @@ const octokit = new Octokit({
   //q: 'q'
 //});
 
+let full_name = [];
+
 class App extends React.Component {
   constructor(props){
     super(props);
 
     this.state = {
-      name: [],
-      repos: null,
-      name1: null,
-      name2: null,
-      name3: null,
+      names: null,
+      language: "",
+      repos: null
     }
   }
 
   
 
-  async componentDidMount() {
+  async getResults() {
+    //console.log(language)
     let error = '';
-
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
-        q: 'Github language: python'
+        q: `stars:>=10 created:>2021-02-07 language:${this.state.location}`
       });
+
       if({data:root}.data["items"]) {
         // server acknowledged request: no data received yet
         repos = await {data:root}.data["items"]; // wait for your data to arrive
@@ -54,16 +55,6 @@ class App extends React.Component {
     // server not contacted
     error = `EXCEPTION: ${err.message}`
     }
-
-    for(let repo of repos){
-      let full_name = [];
-      full_name.push([repo["full_name"]]);
-      console.log(full_name);
-      console.log(repo["full_name"]);
-      //r.push(repos["fullname"]);
-      //console.log(repo)
-      //console.log(repo[r])
-    }
     
     this.setState({
       repos: repos,
@@ -71,29 +62,69 @@ class App extends React.Component {
       name2: repos[1]["full_name"],
       name3: repos[2]["full_name"],
     })
+    this.getNames();
+  }
+
+  getNames() {
+    for(let repo of this.state.repos){
+        full_name.push(repo.full_name);
+      //console.log(repo["full_name"]);
+      //r.push(repos["fullname"]);
+      //console.log(repo)
+      //console.log(repo[r])
+      //console.log(full_name);
+    }
+    //console.log(this.state.location);
+    //console.log(full_name);
     //console.log(this.state.repos);
     //console.log(this.state.name1);
+
+    this.setState({
+      names: full_name,
+    })
+    console.log(this.state.names);
+  }
+
+  handleChange (event) {
+    this.setState({ language: event.target.value });
+  };
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.setState({language: this.state.language})
+    this.getResults();
+    
+    
+    
   }
 
   render(){
-    //let repo;
-    //for(repo of repos){
-        //<li>repo["full_name"]</li>
-    //}
-    
-    /*let reposJsx = this.state.repos.map(r => (
-      <li key={r.full_na>
-        {r.full_name}
+    let namesJsx = this.state.names.map(name => (
+      <li>
+        {name}
       </li>
-    ));*/
+    ));
 
     return(
     <div className="App">
       <h1>Hello World!</h1>
+      <form onSubmit={(e) => this.handleSubmit(e)}>
+        <input
+          type="text"
+          name='language'
+          placeholder="Search for a specific language"
+          value={this.state.language}
+          onChange={(e) => this.handleChange(e)}
+        />
+        <button
+          type="submit"
+        >Search
+        </button>
+      </form>
       <h3>{this.state.name1}</h3>
       <h3>{this.state.name2}</h3>
       <h3>{this.state.name3}</h3>
-      {/*<ul>{repo}</ul>*/}
+      <ul>{namesJsx}</ul>
     </div>
     )
   }
