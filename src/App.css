@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(246.8deg, #d5f2f4 0%, #78d5db 100%) fixed;
+    background: linear-gradient(246.8deg, #78d5db 0%, #d5f2f4 100%) fixed;
     margin: 0;
     padding: 0;
     
@@ -25,4 +25,8 @@ ul{
     font-weight: 600;
     font-size: 18Spx;
     line-height: 35px;
+}
+
+#underline {
+    text-decoration: underline;
 }

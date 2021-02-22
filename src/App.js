@@ -97,7 +97,7 @@ class App extends React.Component {
         {(this.state.repos)
           ? <ul>
             {this.state.repos.map(repo => {
-              return <li key={repo.id}>&#128309;{repo.full_name}&#128311;{repo.language}<br />
+              return <li key={repo.id}>&#128309;<span id="underline">{repo.full_name}</span>&nbsp;&#128311;{repo.language}<br />
                {repo.description}</li>
             })}
           </ul>
