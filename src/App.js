@@ -1,10 +1,10 @@
 import './App.css';
 import React from 'react';
 import { Octokit } from "@octokit/core";
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
 
 const token = process.env.token;
-
-let repos;
 
 const octokit = new Octokit({
   auth: token,
@@ -14,22 +14,18 @@ const octokit = new Octokit({
 class App extends React.Component {
   constructor(props){
     super(props);
-
     this.state = {
-      names: null,
       language: "",
       repos: null,
-      organizedRepos: {names: []}
     }
   }
 
-  
-
   async componentDidMount() {
     let error = '';
+    let repos = null;
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
-        q: `stars:>=10 created:>2021-02-07 language:python`
+        q: `stars:>=1000 created:>2021-02-07`
       });
 
       if({data:root}.data["items"]) {
@@ -37,7 +33,7 @@ class App extends React.Component {
         repos = await {data:root}.data["items"]; // wait for your data to arrive
       } else {
         // server contacted; error occured
-        //error = `ERROR: ${response.status} ${response.statusText}`;
+        error = `ERROR: ${{data:root}.status} ${{data:root}.statusText}`;
       }
     } catch (err) {
     // server not contacted
@@ -46,21 +42,15 @@ class App extends React.Component {
     
     this.setState({
       repos: repos,
-      name1: repos[0]["full_name"],
-      name2: repos[1]["full_name"],
-      name3: repos[2]["full_name"],
     })
-    //this.getNames();
-    console.log(repos);
-    console.log(this.state.repos)
-    //console.log(this.state.names);
   }
 
   async getResults() {
     let error = '';
+    let repos = null;
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
-        q: `stars:>=10 created:>2021-02-07 language:${this.state.language}`
+        q: `stars:>=100 created:>2021-02-07 language:${this.state.language}`
       });
 
       if({data:root}.data["items"]) {
@@ -68,7 +58,7 @@ class App extends React.Component {
         repos = await {data:root}.data["items"]; // wait for your data to arrive
       } else {
         // server contacted; error occured
-        //error = `ERROR: ${response.status} ${response.statusText}`;
+        error = `ERROR: ${{data:root}.status} ${{data:root}.statusText}`;
       }
     } catch (err) {
     // server not contacted
@@ -76,80 +66,47 @@ class App extends React.Component {
     }
     
     this.setState({
-      repos: repos,
-      name1: repos[0]["full_name"],
-      name2: repos[1]["full_name"],
-      name3: repos[2]["full_name"],
+      repos: repos
     })
-    //this.getNames();
-    console.log(repos);
-    console.log(this.state.repos)
-    console.log(this.state.repos[0].full_name);
-    console.log(this.state.repos[0].id);
   }
 
-
-  /*getNames() {
-    let full_name = [];
-    for(let repo of this.state.repos){
-        full_name.push(repo.full_name);
-
-    this.setState({
-      names: full_name,
-      //organizedRepos: {names: this.state.names}
-    })
-    console.log(this.state.names);
-    //console.log(this.state.organizedRepos);
-    }
-  }*/
-
-  handleChange (event) {
+  handleChange(event) {
     this.setState({ language: event.target.value });
   };
 
   handleSubmit(event) {
     event.preventDefault();
     this.setState({language: ''})
-    this.getResults();
-    //console.log(this.state.language)
-    
-    
-    
+    this.getResults(); 
   }
 
   render(){
-    let itemsJsx = this.state.repos.map(repo => {
-      return <li key={repo.id}>{repo.full_name}</li>
-    })
-    //let namesJsx = "hi" //this.state.names.map(name => (
-      //<li>
-        //{name}
-      //</li>
-    //));
-
     return(
-    <div className="App">
-      <h1>Hello World!</h1>
-      <form onSubmit={(e) => this.handleSubmit(e)}>
-        <input
-          type="text"
-          name='language'
-          placeholder="Search for a specific language"
-          value={this.state.language}
-          onChange={(e) => this.handleChange(e)}
-        />
-        <button
-          type="submit"
-        >Search
-        </button>
-      </form>
-      <h3>{this.state.name1}</h3>
-      <h3>{this.state.name2}</h3>
-      <h3>{this.state.name3}</h3>
-      {this.state.repos}
-      ? <ul>{itemsJsx}</ul>
-    : <p>Hello</p>
-    </div>
+      <Container fluid className="App">
+        <h1>Top Repos of the Week!</h1>
+        <form onSubmit={(e) => this.handleSubmit(e)}>
+          <input
+            type="text"
+            name='language'
+            placeholder="Insert language"
+            value={this.state.language}
+            onChange={(e) => this.handleChange(e)}
+          />
+          <Button variant="info"
+            type="submit"
+          >Search
+          </Button>
+        </form>
+        {(this.state.repos)
+          ? <ul>
+            {this.state.repos.map(repo => {
+              return <li key={repo.id}>&#128309;{repo.full_name}&#128311;{repo.language}<br />
+               {repo.description}</li>
+            })}
+          </ul>
+        : <h3>Something went wrong. Try again</h3>
+        }
+      </Container>
     )
   }
   
