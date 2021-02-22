@@ -2,8 +2,6 @@ import './App.css';
 import React from 'react';
 import { Octokit } from "@octokit/core";
 
-//const { Octokit } = require("@octokit/rest");
-
 const token = process.env.token;
 
 let repos;
@@ -12,8 +10,6 @@ const octokit = new Octokit({
   auth: token,
   baseUrl: 'https://api.github.com',
 })
-
-let full_name = [];
 
 class App extends React.Component {
   constructor(props){
@@ -30,7 +26,6 @@ class App extends React.Component {
   
 
   async getResults() {
-    //console.log(this.state.language)
     let error = '';
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
@@ -58,18 +53,19 @@ class App extends React.Component {
     this.getNames();
     //console.log(repos);
     //console.log(this.state.repos)
-    console.log(this.state.names);
+    //console.log(this.state.names);
   }
 
   getNames() {
+    let full_name = [];
     for(let repo of this.state.repos){
         full_name.push(repo.full_name);
 
     this.setState({
       names: full_name,
-      organizedRepos: {names: this.state.names}
+      //organizedRepos: {names: this.state.names}
     })
-    //console.log(this.state.names);
+    console.log(this.state.names);
     //console.log(this.state.organizedRepos);
     }
   }
@@ -89,7 +85,10 @@ class App extends React.Component {
   }
 
   render(){
-    //let namesJsx = this.state.names.map(name => (
+    let itemsJsx = this.state.repos.map(repo => {
+      return <li key={repo.id}>{repo.name}</li>
+   })
+    //let namesJsx = "hi" //this.state.names.map(name => (
       //<li>
         //{name}
       //</li>
@@ -114,9 +113,9 @@ class App extends React.Component {
       <h3>{this.state.name1}</h3>
       <h3>{this.state.name2}</h3>
       <h3>{this.state.name3}</h3>
-      (this.state.names
-      ? <ul>{namesJsx}</ul>
-      : <p>Hello</p>)
+      {this.state.names
+      ? <ul>{itemsJsx}</ul>
+      : <p>Hello</p>}
     </div>
     )
   }
