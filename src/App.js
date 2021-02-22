@@ -76,10 +76,10 @@ class App extends React.Component {
   }
 
   render(){
-    let repo;
-    for(repo of repos){
-        <li>repo["full_name"]</li>
-    }
+    //let repo;
+    //for(repo of repos){
+        //<li>repo["full_name"]</li>
+    //}
     
     /*let reposJsx = this.state.repos.map(r => (
       <li key={r.full_na>
@@ -93,7 +93,7 @@ class App extends React.Component {
       <h3>{this.state.name1}</h3>
       <h3>{this.state.name2}</h3>
       <h3>{this.state.name3}</h3>
-      <ul>{repo}</ul>
+      {/*<ul>{repo}</ul>*/}
     </div>
     )
   }
