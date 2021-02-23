@@ -43,8 +43,9 @@ class App extends React.Component {
     
     this.setState({
       repos: repos,
+      error: error
     })
-    //console.log(finalDate);
+    console.log(error);
   }
 
   async getResults() {
@@ -61,12 +62,12 @@ class App extends React.Component {
         error = `ERROR: ${{data:root}.status} ${{data:root}.statusText}`;
       }
     } catch (err) {
-    // server not contacted
     error = `EXCEPTION: ${err.message}`
     }
     
     this.setState({
-      repos: repos
+      repos: repos,
+      error: error
     })
   }
 
