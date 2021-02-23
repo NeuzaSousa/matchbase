@@ -11,6 +11,11 @@ const octokit = new Octokit({
   baseUrl: 'https://api.github.com',
 })
 
+let today = Date.now();
+let lastWeek = today - 604800000;
+let sevenDays = new Date(lastWeek);
+let finalDate = sevenDays.toLocaleDateString("fr-CA");
+
 class App extends React.Component {
   constructor(props){
     super(props);
@@ -25,9 +30,8 @@ class App extends React.Component {
     let repos = null;
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
-        q: `stars:>=1000 created:>2021-02-15`
+        q: `stars:>=150 created:>=${finalDate}`
       });
-
       if({data:root}.data["items"]) {
         // server acknowledged request: no data received yet
         repos = await {data:root}.data["items"]; // wait for your data to arrive
@@ -40,8 +44,7 @@ class App extends React.Component {
     this.setState({
       repos: repos,
     })
-    //console.log(day);
-    //console.log(today)
+    //console.log(finalDate);
   }
 
   async getResults() {
@@ -49,14 +52,12 @@ class App extends React.Component {
     let repos = null;
     try {
       const { data:root } = await octokit.request("GET /search/repositories", {
-        q: `stars:>=100 created:>2021-02-15 language:${this.state.language}`
+        q: `stars:>=50 created:>=${finalDate} language:${this.state.language}`
       });
 
       if({data:root}.data["items"]) {
-        // server acknowledged request: no data received yet
-        repos = await {data:root}.data["items"]; // wait for your data to arrive
+        repos = await {data:root}.data["items"];
       } else {
-        // server contacted; error occured
         error = `ERROR: ${{data:root}.status} ${{data:root}.statusText}`;
       }
     } catch (err) {
